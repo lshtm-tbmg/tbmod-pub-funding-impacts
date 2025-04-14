@@ -1,0 +1,22 @@
+Country,CountryCode,IncomeGroup,Income,HIV_status
+Central African Republic,CAF,Low income,LIC,HIV
+Guinea-Bissau,GNB,Low income,LIC,HIV
+Malawi,MWI,Low income,LIC,HIV
+Rwanda,RWA,Low income,LIC,HIV
+South Sudan,SSD,Low income,LIC,HIV
+Togo,TGO,Low income,LIC,HIV
+Uganda,UGA,Low income,LIC,HIV
+Cameroon,CMR,Lower middle income,LMIC,HIV
+"Congo, Rep.",COG,Lower middle income,LMIC,HIV
+Côte d’Ivoire,CIV,Lower middle income,LMIC,HIV
+Eswatini,SWZ,Lower middle income,LMIC,HIV
+Kenya,KEN,Lower middle income,LMIC,HIV
+Lesotho,LSO,Lower middle income,LMIC,HIV
+Tanzania,TZA,Lower middle income,LMIC,HIV
+Zambia,ZMB,Lower middle income,LMIC,HIV
+Zimbabwe,ZWE,Lower middle income,LMIC,HIV
+Botswana,BWA,Upper middle income,UMIC,HIV
+Equatorial Guinea,GNQ,Upper middle income,UMIC,HIV
+Gabon,GAB,Upper middle income,UMIC,HIV
+Namibia,NAM,Upper middle income,UMIC,HIV
+South Africa,ZAF,Upper middle income,UMIC,HIV

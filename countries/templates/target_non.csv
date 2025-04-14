@@ -1,0 +1,9 @@
+country,year,xVXa,xSES,xRISK,xHIV,xTB,xtype,xcause,yVXa,ySES,yRISK,yHIV,yTB,ytype,ycause,fn,age_from,age_thru,value,lo,hi,err,name,type
+ZAF,2021.5,all,all,all,all,aTB,stock,NA,all,all,all,all,"aTB,sTB",stock,NA,x/y,15,99,0.504,0.361,0.797,0.218,TB_subclinpr_15_99,ratio
+ZAF,2023.5,all,all,all,all,sTBcount,count,NA,all,all,all,all,all,stock,NA,1e5*x/y,0,14,224.0119863,141.4812545,306.5427181,82.5307318,TB_inci_0_14,inci
+ZAF,2023.5,all,all,all,all,sTBcount,count,NA,all,all,all,all,all,stock,NA,1e5*x/y,15,99,614.7722917,409.8481944,817.9886881,204.0702469,TB_inci_15_99,inci
+ZAF,2023.5,all,all,all,all,sTBcount,count,NA,all,all,all,all,all,stock,NA,1e5*x/y,0,99,614.7722917,409.8481944,817.9886881,204.0702469,TB_inci_0_99,inci
+ZAF,2023.5,all,all,all,all,sTBTcount,count,NA,all,all,all,all,all,stock,NA,1e5*x/y,0,14,97.03845543,77.63076434,116.4461465,19.40769108,TB_notif_0_14,inci
+ZAF,2023.5,all,all,all,all,sTBTcount,count,NA,all,all,all,all,all,stock,NA,1e5*x/y,15,99,97.03845543,77.63076434,116.4461465,19.40769108,TB_notif_15_99,inci
+ZAF,2023.5,all,all,all,all,sTBTcount,count,NA,all,all,all,all,all,stock,NA,1e5*x/y,0,99,357.8401663,286.272133,429.4081995,71.56803325,TB_notif_0_99,inci
+ZAF,2023.5,all,all,all,all,TBdead,count,NA,all,all,all,all,all,stock,NA,1e5*x/y,0,99,99,59,150,45.5,TB_deaths_0_99,inci

@@ -1,0 +1,80 @@
+CountryCode,Country,IncomeGroup,Income,HIV_status,WHOregion
+AFG,Afghanistan,Low income,LIC,Non,EMR
+AGO,Angola,Lower middle income,LMIC,Non,AFR
+ARG,Argentina,Upper middle income,UMIC,Non,AMR
+AZE,Azerbaijan,Upper middle income,UMIC,Non,EUR
+BDI,Burundi,Low income,LIC,Non,AFR
+BEN,Benin,Lower middle income,LMIC,Non,AFR
+BFA,Burkina Faso,Low income,LIC,Non,AFR
+BGD,Bangladesh,Lower middle income,LMIC,Non,SEAR
+BOL,Bolivia,Lower middle income,LMIC,Non,AMR
+BRA,Brazil,Upper middle income,UMIC,Non,AMR
+BTN,Bhutan,Lower middle income,LMIC,Non,SEAR
+CHN,China,Upper middle income,UMIC,Non,WPR
+COD,DRC,Low income,LIC,Non,AFR
+COG,Congo,Lower middle income,LMIC,HIV,AFR
+COL,Colombia,Upper middle income,UMIC,Non,AMR
+CPV,Cabo Verde,Lower middle income,LMIC,Non,AFR
+DOM,Dominican Republic,Upper middle income,UMIC,Non,AMR
+ECU,Ecuador,Upper middle income,UMIC,Non,AMR
+EGY,Egypt,Lower middle income,LMIC,Non,EMR
+ERI,Eritrea,Low income,LIC,Non,AFR
+ETH,Ethiopia,Low income,LIC,Non,AFR
+FJI,Fiji,Upper middle income,UMIC,Non,WPR
+GAB,Gabon,Upper middle income,UMIC,HIV,AFR
+GHA,Ghana,Lower middle income,LMIC,Non,AFR
+GIN,Guinea,Lower middle income,LMIC,Non,AFR
+GMB,Gambia,Low income,LIC,Non,AFR
+GNQ,Equatorial Guinea,Upper middle income,UMIC,HIV,AFR
+GTM,Guatemala,Upper middle income,UMIC,Non,AMR
+IDN,Indonesia,Upper middle income,UMIC,Non,SEAR
+IND,India,Lower middle income,LMIC,Non,SEAR
+IRN,Iran,Upper middle income,UMIC,Non,EMR
+IRQ,Iraq,Upper middle income,UMIC,Non,EMR
+JOR,Jordan,Lower middle income,LMIC,Non,EMR
+KAZ,Kazakhstan,Upper middle income,UMIC,Non,EUR
+KGZ,Kyrgyz Republic,Lower middle income,LMIC,Non,EUR
+KHM,Cambodia,Lower middle income,LMIC,Non,WPR
+LAO,Lao PDR,Lower middle income,LMIC,Non,WPR
+LBR,Liberia,Low income,LIC,Non,AFR
+LBY,Libya,Upper middle income,UMIC,Non,EMR
+LKA,Sri Lanka,Lower middle income,LMIC,Non,SEAR
+LSO,Lesotho,Lower middle income,LMIC,HIV,AFR
+MAR,Morocco,Lower middle income,LMIC,Non,EMR
+MDA,Moldova,Upper middle income,UMIC,Non,EUR
+MDG,Madagascar,Low income,LIC,Non,AFR
+MEX,Mexico,Upper middle income,UMIC,Non,AMR
+MMR,Myanmar,Lower middle income,LMIC,Non,SEAR
+MNG,Mongolia,Upper middle income,UMIC,Non,WPR
+MOZ,Mozambique,Low income,LIC,Non,AFR
+MRT,Mauritania,Lower middle income,LMIC,Non,AFR
+MWI,Malawi,Low income,LIC,HIV,AFR
+MYS,Malaysia,Upper middle income,UMIC,Non,WPR
+NAM,Namibia,Upper middle income,UMIC,HIV,AFR
+NER,Niger,Low income,LIC,Non,AFR
+NGA,Nigeria,Lower middle income,LMIC,Non,AFR
+NPL,Nepal,Lower middle income,LMIC,Non,SEAR
+PAK,Pakistan,Lower middle income,LMIC,Non,EMR
+PER,Peru,Upper middle income,UMIC,Non,AMR
+PHL,Philippines,Lower middle income,LMIC,Non,WPR
+PNG,Papua New Guinea,Lower middle income,LMIC,Non,WPR
+PRY,Paraguay,Upper middle income,UMIC,Non,AMR
+SDN,Sudan,Low income,LIC,Non,EMR
+SEN,Senegal,Lower middle income,LMIC,Non,AFR
+SLV,El Salvador,Upper middle income,UMIC,Non,AMR
+SUR,Suriname,Upper middle income,UMIC,Non,AMR
+SWZ,Eswatini,Lower middle income,LMIC,HIV,AFR
+SYR,Syrian Arab Republic,Low income,LIC,Non,EMR
+TCD,Chad,Low income,LIC,Non,AFR
+THA,Thailand,Upper middle income,UMIC,Non,SEAR
+TJK,Tajikistan,Lower middle income,LMIC,Non,EUR
+TLS,Timor-Leste,Lower middle income,LMIC,Non,SEAR
+TUN,Tunisia,Lower middle income,LMIC,Non,EMR
+UKR,Ukraine,Upper middle income,UMIC,Non,EUR
+VEN,Venezuela,Upper middle income,UMIC,Non,AMR
+VNM,Vietnam,Lower middle income,LMIC,Non,WPR
+VUT,Vanuatu,Lower middle income,LMIC,Non,WPR
+YEM,Yemen,Low income,LIC,Non,EMR
+ZAF,South Africa,Upper middle income,UMIC,HIV,AFR
+ZMB,Zambia,Lower middle income,LMIC,HIV,AFR
+ZWE,Zimbabwe,Lower middle income,LMIC,HIV,AFR

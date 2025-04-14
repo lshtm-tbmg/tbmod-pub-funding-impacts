@@ -1,0 +1,28 @@
+"name","unique.name","xpath","VXa.state","SES.state","RISK.state","HIV.state","age.group","dist","mean","shape","min","max","choose"
+"ep","ep","//TB/TB.infectivity/TB.parameter",NA,NA,NA,NA,NA,"constant",0.102597978647081,NA,NA,NA,FALSE
+"j1","j1A15","//TB/TB.progression/TB.parameter; //TB/TB.transmission/TB.parameter",NA,NA,NA,NA,"A15","constant",1,NA,NA,NA,FALSE
+"j2","j2A15","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,"A15","constant",1,NA,NA,NA,FALSE
+"j3","j3A15","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,"A15","constant",1,NA,NA,NA,FALSE
+"j4","j4A15","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,"A15","constant",1,NA,NA,NA,FALSE
+"omega","omega","//TB/TB.progression/TB.parameter; //TB/TB.transmission/TB.parameter",NA,NA,NA,NA,NA,"constant",0.5,NA,NA,NA,FALSE
+"phiF","phiF","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,NA,"constant",1.4e-06,NA,NA,NA,FALSE
+"sage","sageA0","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,"A0","constant",1,NA,NA,NA,FALSE
+"sfp","sfp","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,NA,"constant",0.987654320987654,NA,NA,NA,FALSE
+"tau","tau","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,NA,"constant",0.5,NA,NA,NA,FALSE
+"chi","chi","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,NA,"uniform",0.175,NA,0.1,0.25,TRUE
+"eta","eta","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,NA,"uniform",0.7,NA,0,1,TRUE
+"j1","j1A0","//TB/TB.progression/TB.parameter; //TB/TB.transmission/TB.parameter",NA,NA,NA,NA,"A0","uniform",0.5,NA,0,1,TRUE
+"j2","j2A0","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,"A0","uniform",0.5,NA,0,1,TRUE
+"j3","j3A0","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,"A0","uniform",0.5,NA,0,1,TRUE
+"j4","j4A0","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,"A0","uniform",0.5,NA,0,1,TRUE
+"musTB","musTB","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,NA,"uniform",0.089,NA,0,0.178,TRUE
+"multiplier","multiplier","//TB/seeded.infections",NA,NA,NA,NA,NA,"uniform",0.8,NA,0,1.9,TRUE
+"phiS","phiS","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,NA,"uniform",0.03605,NA,0.0254,0.0467,TRUE
+"pR","pR","//TB/TB.transmission/TB.parameter",NA,NA,NA,NA,NA,"uniform",0.725,NA,0.6,0.85,TRUE
+"pT","pT","//TB/TB.transmission/TB.parameter",NA,NA,NA,NA,NA,"uniform",2.5e-05,NA,0,0.0068,TRUE
+"rho","rho","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,NA,"uniform",0.03505,NA,1e-04,0.07,TRUE
+"sage","sageA15","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,"A15","uniform",0.5,NA,0,1,TRUE
+"sigma","sigma","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,NA,"uniform",0.0006325,NA,0.000135,0.00113,TRUE
+"t","t","//TB/TB.infectivity/TB.parameter",NA,NA,NA,NA,NA,"uniform",0.81,NA,0.62,1,TRUE
+"theta","theta","//TB/TB.progression/TB.parameter; //TB/TB.transmission/TB.parameter",NA,NA,NA,NA,NA,"uniform",0.0903,NA,0.0696,0.111,TRUE
+"zeta","zeta","//TB/TB.progression/TB.parameter",NA,NA,NA,NA,NA,"uniform",1,NA,0,12,TRUE

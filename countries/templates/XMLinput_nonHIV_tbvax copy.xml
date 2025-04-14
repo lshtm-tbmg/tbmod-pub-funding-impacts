@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<TB.Vx.model.inputfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../TBmod-schema-M2.xsd">
+  <simulation from.year="1900" thru.year="2025">
+    <options>
+      <numerical.integration method="ode45" atol="0" rtol="1e-7" min.value.for.state.var="-0.1"/>
+    </options>
+    <demography country.code="ignored" rescale.population="1950">
+      <from.data>
+        <population file="data/demographics.csv"/>
+        <birthrate from.population.data="true"/>
+        <mortality file="data/deathrates.csv"/>
+      </from.data>
+    </demography>
+    <contact.matrix file="data/all_contacts_2021.txt" Mtb-strain="aTB" ignore.risk.group.mixing="true"/>
+  </simulation>
+  <output>
+    <detailed.output years="seq(2020,2025,0.5)" age.group.lower.limits="0,15" econ.output="true" suppress.zeros.in.stocks="false" suppress.zeros.in.flows="false" combine.stocks.and.flows="false">
+      <flows dim="TB" incidence="true" transmission="true" progression="true" treatment="true"/>
+      <flows dim="HIV"/>
+      <flows dim="VXa"/>
+      <flows dim="RISK"/>
+      <flows dim="SES"/>
+    </detailed.output>
+  </output>
+  <ages lower.limits="c(0:80,90)"/>
+  <VXa> <VXa.states> <state name="NA"/> </VXa.states> </VXa>
+  <SES> <SES.states> <state name="NA"/> </SES.states> </SES>
+  <RISK> <RISK.states> <state name="NA"/> </RISK.states> </RISK>
+  <HIV> <HIV.states> <state name="NA"/> </HIV.states> </HIV>
+  <TB>
+    <TB.states>
+      <state name="Un" fraction.at.birth="1"/>
+      <state name="Uc"/>
+      <state name="If"/>
+      <state name="Is"/>
+      <state name="aTB"/>
+      <state name="sTB"/>
+      <state name="OT"/>
+      <state name="R"/>
+      <state name="TBdead"/>
+      <state name="aTBcount"/>
+      <state name="sTBcount"/>
+      <state name="sTBTcount"/>
+    </TB.states>
+    
+    <seeded.infections name="multiplier" value="1.0">
+      <seeded.infection fraction="0.2460" age.from="0" age.thru="99" state="Uc"/>
+      <seeded.infection fraction="0.0188" age.from="0" age.thru="99" state="If"/>
+      <seeded.infection fraction="0.1980" age.from="0" age.thru="99" state="Is"/>
+      <seeded.infection fraction="0.00317" age.from="0" age.thru="99" state="aTB"/>
+      <seeded.infection fraction="0.00265" age.from="0" age.thru="99" state="sTB"/>
+      <seeded.infection fraction="0.0484" age.from="0" age.thru="99" state="R"/>
+    </seeded.infections>
+
+    <TB.progression>
+      <age.groups>
+        <age.group name="A0"/>
+        <age.group name="A15"/>
+      </age.groups>
+      <TB.parameter name="sage" age.group="A0" value="1"/>
+      <TB.parameter name="sage" age.group="A15" value="0.5"/>
+      <TB.parameter name="j1" age.group="A0" value="0.5"/>
+      <TB.parameter name="j1" age.group="A15" value="1"/>
+      <TB.parameter name="j2" age.group="A0" value="0.5"/>
+      <TB.parameter name="j2" age.group="A15" value="1"/>
+      <TB.parameter name="j3" age.group="A0" value="0.5"/>
+      <TB.parameter name="j3" age.group="A15" value="1"/>
+      <TB.parameter name="j4" age.group="A0" value="0.5"/>
+      <TB.parameter name="j4" age.group="A15" value="1"/>
+      <TB.parameter name="phiF" value="1.4e-6"/>
+      <TB.parameter name="omega" value="0.5"/>
+      <TB.parameter name="tau" value="0.5"/>
+      <TB.parameter name="phiS" value="0.03605"/>
+      <TB.parameter name="theta" value="0.0903"/>
+      <TB.parameter name="sigma" value="0.6325e-3"/>
+      <TB.parameter name="rho" value="0.04"/>
+      <TB.parameter name="zeta" value="1"/>
+      <TB.parameter name="chi" value="0.175"/>
+      <TB.parameter name="eta" value="0.650670699"/>
+      <TB.parameter name="kappa" value="0.257107651"/>
+      <TB.parameter name="sfp" value="0.938462445"/>
+      <TB.parameter name="musTB" value="0.089"/>
+
+      <constant.transition.matrix>
+        <transition from="If" to="Is" rate="omega"/>
+        <transition from="If" to="Uc" rate="phiF"/>
+        <transition from="Is" to="Uc" rate="phiS"/>
+        <transition from="aTB" to="sTB" rate="zeta"/>
+        <transition from="aTB" to="sTBcount" rate="zeta"/>
+        <transition from="aTB" to="R" rate="chi"/>
+        <transition from="sTB" to="R" rate="chi"/>
+        <transition from="sTB" to="TBdead" rate="musTB*sage"/>
+        <transition from="R" to="aTB" rate="max(0.0001,rho*j3)"/>
+        <transition from="R" to="aTBcount" rate="max(0.0001,rho*j3)"/>
+        <transition from="If" to="aTB" rate="max(0.0696,theta*j1)"/>
+        <transition from="If" to="aTBcount" rate="max(0.0696,theta*j1)"/>
+        <transition from="Is" to="aTB" rate="max(0.000135,sigma*j2)"/>        
+        <transition from="Is" to="aTBcount" rate="max(0.000135,sigma*j2)"/>
+        <transition from="OT" to="sTB" rate="((1-sfp)/tau)*(1-kappa*sage)"/>
+        <transition from="OT" to="R" rate="(sfp/tau)*(1-kappa*sage)"/>
+        <transition from="OT" to="TBdead" rate="kappa*sage/tau"/>
+      </constant.transition.matrix>
+
+      <transition.matrix name="init">
+        <transition from="sTB" to="OT" rate="eta*j4"/>
+        <transition from="sTB" to="sTBTcount" rate="eta*j4"/>
+        <multiplier name="etamul" times="1959, 1960, 1961, 1962, 1963, 1964, 1965, 1966, 1967, 1968, 1969, 1970, 1971,
+                 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979, 1980, 1981, 1982, 1983, 1984,
+                 1985, 1986, 1987, 1988, 1989, 1990, 1991, 1992, 1993, 1994, 1995, 1996, 1997,
+                 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010,
+                 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020" 
+                 values="0, 0.002731961, 0.003334807, 0.004070138, 0.004966802, 0.006059801, 0.007391541,
+                 0.009013299, 0.010986943, 0.013386918, 0.016302499, 0.019840306, 0.024127021, 0.029312231,
+                  0.035571189, 0.043107255, 0.052153563, 0.062973356, 0.07585818,
+                  0.091122961, 0.109096821, 0.130108474, 0.154465265, 0.182425524, 0.214165017,
+                   0.249739894, 0.289050497, 0.331812228, 0.377540669, 0.425557483, 0.475020813,
+                  0.524979187, 0.574442517, 0.622459331, 0.668187772, 0.710949503, 0.750260106,
+                   0.785834983, 0.817574476, 0.845534735, 0.869891526, 0.890903179, 0.908877039,         
+                  0.92414182, 0.937026644, 0.947846437, 0.956892745, 0.964428811, 0.970687769,
+                   0.975872979, 0.980159694, 0.983697501, 0.986613082, 0.989013057, 0.990986701,         
+                  0.992608459, 0.993940199, 0.995033198, 0.995929862, 0.996665193, 0.997268039, 1"/>
+        </transition.matrix>
+    </TB.progression>
+    <TB.infectivity>
+      <TB.parameter name="t" value="0.83"/>
+      <TB.parameter name="ep" value="0.067392916"/>
+      <infectivity.matrix Mtb-strain="aTB">
+        <infectivity state="aTB" value="(1-ep)*t"/>
+        <infectivity state="sTB" value="(1-ep)*1"/>
+      </infectivity.matrix>
+    </TB.infectivity>
+    <TB.transmission>
+      <age.groups>
+        <age.group name="A0"/>
+        <age.group name="A15"/>
+      </age.groups>
+      <TB.parameter name="pT" value="0.0007"/>
+      <TB.parameter name="pR" value="0.725"/>
+      <TB.parameter name="theta" value="0.0903"/>
+      <TB.parameter name="omega" value="0.5"/>
+      <TB.parameter name="j1" age.group="A0" value="0.5"/>
+      <TB.parameter name="j1" age.group="A15" value="1"/>
+      <transmission.matrix Mtb-strain="aTB">
+        <transition from="Un" to="If" rate="pT"/>
+        <transition from="Uc" to="If" rate="pT*(1-pR*0.5)"/>
+        <transition from="Is" to="If" rate="pT*(1-pR)"/>
+        <transition from="R" to="aTB" rate="pT*(1-pR)*(max(0.0696,j1*theta)/(max(0.0696,j1*theta)+omega))"/>
+        <transition from="R" to="aTBcount" rate="pT*(1-pR)*(max(0.0696,j1*theta)/(max(0.0696,j1*theta)+omega))"/>
+        <multiplier name="contact" times="1900,2020" values="1,1"/>
+
+      </transmission.matrix>
+    </TB.transmission>
+  </TB>
+</TB.Vx.model.inputfile>

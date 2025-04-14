@@ -1,0 +1,36 @@
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+
+# User-specific files
+.Ruserdata
+
+# RStudio files
+.Rproj.user/
+
+# R Environment Variables
+.Renviron
+
+# OSX Desktop Services Store
+**/.DS_Store
+lmic_countries/.Rprofile
+Countrycheck.log
+Countrycheck.log
+temp/temp.xml
+logs/logfile.log
+countries/IND/output/x.archived/*
+R_ABC/x.archived/*
+countries/IND/logs/*
+countries/IND/output/*
+n_simul_tot_step1
+output_mcmc
+x.test/
+.DS_Store
+
+
+x.*/
+epi_output/*
+econ_output*/*

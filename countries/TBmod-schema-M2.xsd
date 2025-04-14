@@ -1,0 +1,750 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning" elementFormDefault="qualified" vc:minVersion="1.1">
+  <xs:simpleType name="rkMethod">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="euler"/>
+      <xs:enumeration value="rk2"/>
+      <xs:enumeration value="rk4"/>
+      <xs:enumeration value="rk23"/>
+      <xs:enumeration value="ode23"/>
+      <xs:enumeration value="rk23bs"/>
+      <xs:enumeration value="rk34f"/>
+      <xs:enumeration value="rk45ck"/>
+      <xs:enumeration value="rk45f"/>
+      <xs:enumeration value="rk45e"/>
+      <xs:enumeration value="rk45dp6"/>
+      <xs:enumeration value="rk45dp7"/>
+      <xs:enumeration value="ode45"/>
+      <xs:enumeration value="rk78f"/>
+      <xs:enumeration value="rk78dp"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="incidence.denominator">
+  <xs:restriction base="xs:string">
+    <xs:enumeration value="susc"/>
+    <xs:enumeration value="all"/>
+  </xs:restriction>
+</xs:simpleType>
+  <xs:simpleType name="fraction">
+    <xs:restriction base='xs:double'>
+      <xs:minInclusive value='0.0'/>
+      <xs:maxInclusive value='1.0'/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="nonnegdouble">
+    <xs:restriction base='xs:double'>
+      <xs:minInclusive value='0.0'/>
+      <xs:maxInclusive value='1e6'/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ageinyears">
+    <xs:restriction base='xs:integer'>
+      <xs:minInclusive value='0'/>
+      <xs:maxInclusive value='99'/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name='yearseq'>
+    <xs:restriction base='xs:string'>
+      <xs:pattern value='(\d+)(,\s*\d+)*'/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name='numberseq'>
+    <xs:restriction base='xs:string'>
+      <xs:pattern value='(\d+\.?\d*)+(,\s*(\d+\.?\d*))*'/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name='parametername'>
+    <xs:restriction base='xs:string'>
+      
+    <xs:pattern value='[a-zA-Z]*\d*.*'/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name='agegroupID'>
+    <xs:restriction base='xs:string'>
+      <xs:pattern value='A[0-9]{1,2}'/>
+    </xs:restriction>
+  </xs:simpleType>
+    <xs:complexType name="incidence">
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="incidence.data"/>
+      </xs:sequence>
+    </xs:complexType>
+  <xs:element name="incidence.data">
+    <xs:complexType >
+      <xs:attribute name="file" use="required" type="xs:string"/>
+      <xs:attribute name="times" use="required" type="xs:string"/>
+      <xs:attribute name="values" use="required" type="xs:string"/>
+      <xs:attribute name="proportions" default="false" type="xs:boolean"/>
+      <xs:attribute name="denominator" default="susc" type="incidence.denominator"/>
+      <xs:attribute name="once.per.year" default="false" type="xs:boolean"/>
+      <xs:attribute name="target.prevalence" default="false" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TB.Vx.model.inputfile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="simulation"/>
+        <xs:element ref="output"/>
+        <xs:element ref="ages"/>
+        <xs:element ref="VXa"/>
+        <xs:element ref="SES"/>
+        <xs:element ref="RISK"/>
+        <xs:element ref="HIV"/>
+        <xs:element ref="TB"/>
+      </xs:sequence>
+    </xs:complexType>
+
+    <xs:key name="VXa.key">
+      <xs:selector xpath="VXa/VXa.states/state"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+
+    <xs:keyref name="VXa.key.ref.TB.prog" refer="VXa.key">
+      <xs:selector xpath="TB/TB.progression/TB.parameter"/>
+      <xs:field xpath="@VXa.state"/>
+    </xs:keyref>
+    <xs:keyref name="VXa.key.ref.TB.infc" refer="VXa.key">
+      <xs:selector xpath="TB/TB.infectivity/TB.parameter"/>
+      <xs:field xpath="@VXa.state"/>
+    </xs:keyref>
+    <xs:keyref name="VXa.key.ref.TB.trans" refer="VXa.key">
+      <xs:selector xpath="TB/TB.transmission/TB.parameter"/>
+      <xs:field xpath="@VXa.state"/>
+    </xs:keyref>
+
+    <xs:key name="age.group.key.VXa.prog">
+      <xs:selector xpath="VXa/VXa.progression/age.groups/age.group"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:keyref name="age.group.key.VXa.prog.ref" refer="age.group.key.VXa.prog">
+      <xs:selector xpath="VXa/VXa.progression/VXa.parameter"/>
+      <xs:field xpath="@age.group"/>
+    </xs:keyref>
+
+    <xs:keyref name="TB.key.VXa.prog.ref" refer="TB.key">
+      <xs:selector xpath="VXa/VXa.progression/VXa.parameter"/>
+      <xs:field xpath="@TB.state"/>
+    </xs:keyref>
+
+    <xs:keyref name="VXa.ref.VXa.prog.from" refer="VXa.key">
+      <xs:selector xpath="VXa/VXa.progression/constant.transition.matrix/transition"/>
+      <xs:field xpath="@from"/>
+    </xs:keyref>
+    <xs:keyref name="VXa.ref.VXa.prog.to" refer="VXa.key">
+      <xs:selector xpath="VXa/VXa.progression/constant.transition.matrix/transition"/>
+      <xs:field xpath="@to"/>
+    </xs:keyref>
+
+
+    <xs:key name="SES.key">
+      <xs:selector xpath="SES/SES.states/state"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:keyref name="SES.key.ref.TB.prog" refer="SES.key">
+      <xs:selector xpath="TB/TB.progression/TB.parameter"/>
+      <xs:field xpath="@SES.state"/>
+    </xs:keyref>
+    <xs:keyref name="SES.key.ref.TB.infc" refer="SES.key">
+      <xs:selector xpath="TB/TB.infectivity/TB.parameter"/>
+      <xs:field xpath="@SES.state"/>
+    </xs:keyref>
+    <xs:keyref name="SES.key.ref.TB.trans" refer="SES.key">
+      <xs:selector xpath="TB/TB.transmission/TB.parameter"/>
+      <xs:field xpath="@SES.state"/>
+    </xs:keyref>
+    <xs:key name="age.group.key.SES.prog">
+      <xs:selector xpath="SES/SES.progression/age.groups/age.group"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:keyref name="age.group.key.SES.prog.ref" refer="age.group.key.SES.prog">
+      <xs:selector xpath="SES/SES.progression/SES.parameter"/>
+      <xs:field xpath="@age.group"/>
+    </xs:keyref>
+    <xs:keyref name="SES.ref.SES.prog.from" refer="SES.key">
+      <xs:selector xpath="SES/SES.progression/constant.transition.matrix/transition"/>
+      <xs:field xpath="@from"/>
+    </xs:keyref>
+    <xs:keyref name="SES.ref.SES.prog.to" refer="SES.key">
+      <xs:selector xpath="SES/SES.progression/constant.transition.matrix/transition"/>
+      <xs:field xpath="@to"/>
+    </xs:keyref>
+
+    <xs:key name="RISK.key">
+      <xs:selector xpath="RISK/RISK.states/state"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:keyref name="RISK.key.ref.TB.prog" refer="RISK.key">
+      <xs:selector xpath="TB/TB.progression/TB.parameter"/>
+      <xs:field xpath="@RISK.state"/>
+    </xs:keyref>
+    <xs:keyref name="RISK.key.ref.TB.infc" refer="RISK.key">
+      <xs:selector xpath="TB/TB.infectivity/TB.parameter"/>
+      <xs:field xpath="@RISK.state"/>
+    </xs:keyref>
+    <xs:keyref name="RISK.key.ref.TB.trans" refer="RISK.key">
+      <xs:selector xpath="TB/TB.transmission/TB.parameter"/>
+      <xs:field xpath="@RISK.state"/>
+    </xs:keyref>
+    <xs:key name="age.group.key.RISK.prog">
+      <xs:selector xpath="RISK/RISK.progression/age.groups/age.group"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:keyref name="age.group.key.RISK.prog.ref" refer="age.group.key.RISK.prog">
+      <xs:selector xpath="RISK/RISK.progression/RISK.parameter"/>
+      <xs:field xpath="@age.group"/>
+    </xs:keyref>
+    <xs:keyref name="RISK.ref.RISK.prog.from" refer="RISK.key">
+      <xs:selector xpath="RISK/RISK.progression/constant.transition.matrix/transition"/>
+      <xs:field xpath="@from"/>
+    </xs:keyref>
+    <xs:keyref name="RISK.ref.RISK.prog.to" refer="RISK.key">
+      <xs:selector xpath="RISK/RISK.progression/constant.transition.matrix/transition"/>
+      <xs:field xpath="@to"/>
+    </xs:keyref>
+
+    <xs:key name="HIV.key">
+      <xs:selector xpath="HIV/HIV.states/state"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:keyref name="HIV.ref.TB.prog" refer="HIV.key">
+      <xs:selector xpath="TB/TB.progression/TB.parameter"/>
+      <xs:field xpath="@HIV.state"/>
+    </xs:keyref>
+    <xs:keyref name="HIV.ref.TB.infc" refer="HIV.key">
+      <xs:selector xpath="TB/TB.infectivity/TB.parameter"/>
+      <xs:field xpath="@HIV.state"/>
+    </xs:keyref>
+    <xs:keyref name="HIV.ref.TB.trans" refer="HIV.key">
+      <xs:selector xpath="TB/TB.transmission/TB.parameter"/>
+      <xs:field xpath="@HIV.state"/>
+    </xs:keyref>
+
+
+    <xs:key name="age.group.key.HIV.prog">
+      <xs:selector xpath="HIV/HIV.progression/age.groups/age.group"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:keyref name="age.group.key.HIV.prog.ref" refer="age.group.key.HIV.prog">
+      <xs:selector xpath="HIV/HIV.progression/HIV.parameter"/>
+      <xs:field xpath="@age.group"/>
+    </xs:keyref>
+    <xs:keyref name="HIV.ref.HIV.prog.from" refer="HIV.key">
+      <xs:selector xpath="HIV/HIV.progression/constant.transition.matrix/transition"/>
+      <xs:field xpath="@from"/>
+    </xs:keyref>
+    <xs:keyref name="HIV.ref.HIV.prog.to" refer="HIV.key">
+      <xs:selector xpath="HIV/HIV.progression/constant.transition.matrix/transition"/>
+      <xs:field xpath="@to"/>
+    </xs:keyref>
+
+
+
+    <xs:key name="age.group.key.TB.prog">
+      <xs:selector xpath="TB/TB.progression/age.groups/age.group"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:keyref name="age.group.key.TB.prog.ref" refer="age.group.key.TB.prog">
+      <xs:selector xpath="TB/TB.progression/TB.parameter"/>
+      <xs:field xpath="@age.group"/>
+    </xs:keyref>
+    <xs:key name="age.group.key.TB.infc">
+      <xs:selector xpath="TB/TB.infectivity/age.groups/age.group"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:keyref name="age.group.key.TB.infc.ref" refer="age.group.key.TB.infc">
+      <xs:selector xpath="TB/TB.infectivity/TB.parameter"/>
+      <xs:field xpath="@age.group"/>
+    </xs:keyref>
+
+    <xs:key name="TB.key">
+      <xs:selector xpath="TB/TB.states/state"/>
+      <xs:field xpath="@name"/>
+    </xs:key>
+    <xs:keyref name="TB.ref.TB.transm.from" refer="TB.key">
+      <xs:selector xpath="TB/TB.transmission/transmission.matrix/transition"/>
+      <xs:field xpath="@from"/>
+    </xs:keyref>
+    <xs:keyref name="TB.ref.TB.transm.to" refer="TB.key">
+      <xs:selector xpath="TB/TB.transmission/transmission.matrix/transition"/>
+      <xs:field xpath="@to"/>
+    </xs:keyref>
+    <xs:keyref name="TB.ref.TB.prog.from" refer="TB.key">
+      <xs:selector xpath="TB/TB.progression/constant.transition.matrix/transition"/>
+      <xs:field xpath="@from"/>
+    </xs:keyref>
+    <xs:keyref name="TB.ref.TB.prog.to" refer="TB.key">
+      <xs:selector xpath="TB/TB.progression/constant.transition.matrix/transition"/>
+      <xs:field xpath="@to"/>
+    </xs:keyref>
+    <xs:keyref name="TB.ref.TB.infc" refer="TB.key">
+      <xs:selector xpath="TB/TB.infectivity/infectivity.matrix/infectivity"/>
+      <xs:field xpath="@state"/>
+    </xs:keyref>
+  </xs:element>
+  <xs:element name="simulation">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="options"/>
+        <xs:element ref="demography"/>
+        <xs:element ref="contact.matrix" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+      <xs:attribute name="from.year" use="required" type="xs:integer"/>
+      <xs:attribute name="thru.year" use="required" type="xs:integer"/>
+      <xs:attribute name="dt" default="0.5" type="fraction"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="options">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="numerical.integration" minOccurs="1" maxOccurs="2"/>
+        <xs:element ref="intervention.start" minOccurs="0"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="intervention.start">
+    <xs:complexType>
+      <xs:attribute name="from.incidence.data" default="VXa" type="xs:string" />
+      <xs:attribute name="year" default="1e6" type="nonnegdouble"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="numerical.integration">
+    <xs:complexType>
+      <xs:attribute name="from.year" default="1900" type="xs:integer"/>
+      <xs:attribute name="method" default="ode23" type="rkMethod"/>
+      <xs:attribute name="maxsteps" default="5000" type="xs:nonNegativeInteger"/>
+      <xs:attribute name="hmin" default="0.0" type="fraction"/>
+      <xs:attribute name="hini" default="0.2" type="fraction"/>
+      <xs:attribute name="rtol" default="1e-6" type="fraction"/>
+      <xs:attribute name="atol" default="1e-6" type="fraction"/>
+      <xs:attribute name="min.value.for.state.var" default="-0.03" type="xs:double"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="demography">
+    <xs:complexType>
+      <xs:choice>
+        <xs:element ref="from.data"/>
+        <xs:element ref="from.distribution"/>
+      </xs:choice>
+      <xs:attribute name="country.code" use="required" type="xs:string"/>
+      <xs:attribute name="rescale.population" use="required" type="xs:double"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="from.data">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="population"/>
+        <xs:element ref="birthrate"/>
+        <xs:element ref="mortality"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="from.distribution">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="population"/>
+        <xs:element ref="birthrate"/>
+        <xs:element ref="mortality"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="contact.matrix">
+    <xs:complexType>
+      <xs:attribute name="file" use="optional" type="xs:string"/>
+      <xs:attribute name="Mtb-strain" use="optional" type="xs:string"/>
+      <xs:attribute name="use.transpose.initial.contact.matrix" default="false" type="xs:boolean"/>
+      <xs:attribute name="output.years" use="optional" type="xs:string"/>
+      <xs:attribute name="ignore.risk.group.mixing" default="true" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="output">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="final.population.as.fraction" minOccurs="0" maxOccurs="1"/>
+        <xs:element ref="detailed.output" minOccurs="0" maxOccurs="1"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="final.population.as.fraction">
+    <xs:complexType>
+      <xs:attribute name="file" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="detailed.output">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="flows" minOccurs="5" maxOccurs="5"/>
+      </xs:sequence>
+      <xs:attribute name="years" use="required" type="xs:string"/>
+      <xs:attribute name="age.group.lower.limits" use="optional" type="xs:string"/>
+      <xs:attribute name="econ.output" default="false" type="xs:boolean"/>
+      <xs:attribute name="suppress.zeros.in.stocks" default="false" type="xs:boolean"/>
+      <xs:attribute name="suppress.zeros.in.flows" default="false" type="xs:boolean"/>
+      <xs:attribute name="combine.stocks.and.flows" default="false" type="xs:boolean"/>
+      <xs:attribute name="excluded.from.dHIVTBx" default="NA" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="flows">
+    <xs:complexType>
+      <xs:attribute name="dim" use="required" type="xs:string"/>
+      <xs:attribute name="transmission" default="false" type="xs:boolean"/>
+      <xs:attribute name="progression" default="false" type="xs:boolean"/>
+      <xs:attribute name="treatment" default="false" type="xs:boolean"/>
+      <xs:attribute name="incidence" default="false" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="population">
+    <xs:complexType>
+      <xs:attribute name="file" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="birthrate">
+    <xs:complexType>
+      <xs:attribute name="from.population.data" default="false" type="xs:boolean"/>
+      <xs:attribute name="fraction" type="fraction"/>
+      <xs:attribute name="number" type="xs:integer"/>
+      <xs:attribute name="file" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mortality">
+    <xs:complexType>
+      <xs:attribute name="file" use="optional" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+   <xs:element name="ages">
+    <xs:complexType>
+      <xs:attribute name="lower.limits"  use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="VXa">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" ref="VXa.states"/>
+        <xs:element minOccurs="0" name="VXa.incidence" type="incidence"/>
+        <xs:element minOccurs="0" ref="VXa.progression"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VXa.states">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="1" ref="state"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VXa.progression">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="age.groups"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="VXa.parameter"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="constant.transition.matrix"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="transition.matrix"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="VXa.parameter">
+    <xs:complexType>
+      <xs:attribute name="age.group"  use="optional" type="agegroupID"/>
+      <xs:attribute name="TB.state" use="optional" type="xs:string"/>
+      <xs:attribute name="HIV.state" use="optional" type="xs:string"/>
+      <xs:attribute name="RISK.state" use="optional" type="xs:string"/>
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="value" use="required" type="nonnegdouble"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SES">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" ref="SES.states"/>
+        <xs:element minOccurs="0" name="SES.incidence" type="incidence"/>
+        <xs:element minOccurs="0" ref="SES.progression"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SES.states">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="1" ref="state"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SES.progression">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="age.groups"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="SES.parameter"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="constant.transition.matrix"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="transition.matrix"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SES.parameter">
+    <xs:complexType>
+      <xs:attribute name="age.group"  use="optional" type="agegroupID"/>
+      <xs:attribute name="TB.state" use="optional" type="xs:string"/>
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="value" use="required" type="nonnegdouble"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RISK">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" ref="RISK.states"/>
+        <xs:element minOccurs="0" name="RISK.incidence" type="incidence"/>
+        <xs:element minOccurs="0" ref="RISK.progression"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RISK.states">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="1" ref="state"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RISK.progression">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="age.groups"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="RISK.parameter"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="constant.transition.matrix"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="transition.matrix"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="RISK.parameter">
+    <xs:complexType>
+      <xs:attribute name="age.group"  use="optional" type="agegroupID"/>
+      <xs:attribute name="VXa.state"  use="optional" type="xs:string"/>
+      <xs:attribute name="TB.state" use="optional" type="xs:string"/>
+      <xs:attribute name="HIV.state" use="optional" type="xs:string"/>
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="value" use="required" type="nonnegdouble"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="HIV">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="1" ref="HIV.states"/>
+        <xs:element name="HIV.incidence" minOccurs="0" maxOccurs="1" type="incidence"/>
+        <xs:element minOccurs="0" ref="HIV.progression"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="HIV.states">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="1" ref="state"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="HIV.progression">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="age.groups"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="HIV.parameter"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="constant.transition.matrix"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="transition.matrix"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="HIV.parameter">
+    <xs:complexType>
+      <xs:attribute name="age.group"  use="optional" type="agegroupID"/>
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="value" use="required" type="nonnegdouble"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TB">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="TB.states"/>
+        <xs:element ref="seeded.infections"/>
+        <xs:element ref="TB.progression"/>
+        <xs:element ref="TB.infectivity"/>
+        <xs:element ref="TB.transmission"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TB.states">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" minOccurs="1" ref="state"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="state">
+    <xs:complexType>
+        <xs:attribute name="name" use="required" type="parametername"/>
+        <xs:attribute name="fraction.at.birth" type="fraction" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="seeded.infections">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="seeded.infection"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="value" use="required" type="nonnegdouble"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="seeded.infection">
+    <xs:complexType>
+      <xs:attribute name="age.from" use="required" type="xs:nonNegativeInteger"/>
+      <xs:attribute name="age.thru" use="required" type="xs:nonNegativeInteger"/>
+      <xs:attribute name="fraction" use="required" type="fraction"/>
+      <xs:attribute name="state" use="required" type="parametername"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TB.progression">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="age.groups"/>
+        <xs:element maxOccurs="unbounded" ref="TB.parameter"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="tests"/>
+        <xs:element minOccurs="0" maxOccurs="1" ref="constant.transition.matrix"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="transition.matrix"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TB.infectivity">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="age.groups"/>
+        <xs:element maxOccurs="unbounded" ref="TB.parameter"/>
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="infectivity.matrix"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="infectivity.matrix">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="infectivity"/>
+      </xs:sequence>
+      <xs:attribute name="Mtb-strain" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="infectivity">
+    <xs:complexType>
+      <xs:attribute name="state" use="required" type="parametername"/>
+      <xs:attribute name="value" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TB.transmission">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="1" ref="age.groups"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="TB.parameter"/>
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="transmission.matrix"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TB.parameter">
+    <xs:complexType>
+      <xs:attribute name="VXa.state" use="optional" type="parametername"/>
+      <xs:attribute name="SES.state" use="optional" type="parametername"/>
+      <xs:attribute name="RISK.state" use="optional" type="parametername"/>
+      <xs:attribute name="HIV.state" use="optional" type="parametername"/>
+      <xs:attribute name="age.group" use="optional" type="agegroupID"/>
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="value" use="required" type="nonnegdouble"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="parameter">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="value" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="age.groups">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="age.group"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="age.group">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="agegroupID"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transmission.matrix">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameter"/>
+        <xs:element maxOccurs="unbounded" ref="transition"/>
+        <xs:element minOccurs="0" maxOccurs="1" name="multiplier" type="timed.parameter"/>
+      </xs:sequence>
+      <xs:attribute name="Mtb-strain" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transition.matrix">
+      <xs:complexType>
+        <xs:sequence>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameter"/>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="transition"/>
+          <xs:element minOccurs="0" maxOccurs="unbounded" name="multiplier" type="timed.parameter"/>
+        </xs:sequence>
+        <xs:attribute name="after.test" use="optional" type="xs:string"/>
+        <xs:attribute name="used.in" use="optional" type="xs:string"/>
+        <xs:attribute name="rates.as.fraction.of.population" default="false" type="xs:boolean"/>
+        <xs:attribute name="expression" use="optional" type="xs:string"/>
+        <xs:attribute name="trigger" default="false" type="xs:string"/>
+        <xs:attribute name="name" use="required" type="parametername"/>
+      </xs:complexType>
+  </xs:element>
+  <xs:element name="tests">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="test"/>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="compound.test"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="test">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="1" maxOccurs="unbounded" ref="TB.state.tested"/>
+        <xs:element minOccurs="0" maxOccurs="1" name="multiplier" type="timed.parameter"/>
+      </xs:sequence>
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="age.group" use="optional" type="agegroupID"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="TB.state.tested">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="fraction.positive" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="compound.test">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="expression" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="constant.transition.matrix">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="parameter"/>
+        <xs:element maxOccurs="unbounded" ref="transition"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="transition">
+    <xs:complexType>
+      <xs:attribute name="from" use="required" type="parametername"/>
+      <xs:attribute name="rate" use="required"/>
+      <xs:attribute name="to" use="required" type="parametername"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="timed.parameter">
+      <xs:attribute name="name" use="required" type="parametername"/>
+      <xs:attribute name="times" use="required" type="xs:string"/>
+      <xs:attribute name="values" use="required" type="xs:string"/>
+      <xs:attribute name="interpolate" default="false" type="xs:boolean" />
+  </xs:complexType>
+</xs:schema>
